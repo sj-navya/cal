@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interview Scheduler</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    .left-panel {
+      width: 30%;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-right: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+    .left-panel h2 {
+      margin-top: 0;
+    }
+    .search-box {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .results {
+      margin-top: 10px;
+    }
+    .result-item {
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .result-item:hover {
+      background-color: #e8e8e8;
+    }
+    .book-button {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .book-button:hover {
+      background-color: #0056b3;
+    }
+    .right-panel {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      padding: 20px;
+      background-color: #333;
+      color: white;
+    }
+    iframe {
+      flex-grow: 1;
+      border: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="left-panel">
+    <h2>Search Interviewer(s)</h2>
+    <input type="text" id="searchInput" class="search-box" placeholder="Search interviewer(s)" onkeyup="searchInterviewers()">
+    <div class="results" id="results"></div>
+    <button id="bookButton" class="book-button" onclick="loadCalendar()">Book interview with <span id="interviewerName"></span></button>
+  </div>
+
+  <div class="right-panel">
+    <div class="header">
+      <h1>Interview Booking Calendar</h1>
+    </div>
+    <iframe id="calendarFrame"></iframe>
+  </div>
+
+  <script>
+    const interviewers = [
+      {
+        name: "Sanket NAVYA",
+        link: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ03-A0xDcyvi-bHbhaLU3vvHdgbsFQ-9KHQWKknVh8m6Hv6k5ehA2C9XM9q7n2_fSWi6O473wsD"
+      },
+      {
+        name: "Sanket TRP",
+        link: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0lOMJ--QsAPrpKkXnnGjoWWjRSIxK3ONdk4e0rAYGIcn8HX-1TLT7s_q2QfJhm_qsPDGQhUtt7"
+      }
+    ];
+
+    let selectedInterviewer = null;
+
+    function searchInterviewers() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      interviewers.forEach(interviewer => {
+        if (interviewer.name.toLowerCase().includes(input)) {
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.innerText = interviewer.name;
+          div.onclick = () => selectInterviewer(interviewer);
+          resultsDiv.appendChild(div);
+        }
+      });
+
+      document.getElementById("bookButton").style.display = "none";
+      document.getElementById("calendarFrame").src = ""; // clear calendar
+    }
+
+    function selectInterviewer(interviewer) {
+      selectedInterviewer = interviewer;
+      document.getElementById("interviewerName").textContent = interviewer.name;
+      document.getElementById("bookButton").style.display = "inline-block";
+    }
+
+    function loadCalendar() {
+      if (selectedInterviewer) {
+        document.getElementById("calendarFrame").src = selectedInterviewer.link;
+      }
+    }
+  </script>
+</body>
+</html>
